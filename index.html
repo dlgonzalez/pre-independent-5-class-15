@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 15: The Final Challenge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #1E3A8A; 
+            --color-primary-light: #3B82F6;
+            --color-primary-hover: #2563EB;
+            --color-secondary: #10B981; 
+            --color-secondary-hover: #059669;
+            --color-accent: #F59E0B; 
+            --color-background: #F1F5F9;
+            --color-surface: #FFFFFF;
+            --color-surface-hover: #F8FAFC;
+            
+            --color-text-main: #0F172A;
+            --color-text-muted: #64748B;
+            --color-border: #E2E8F0;
+            --color-border-hover: #CBD5E1;
+            
+            --color-success: #059669;
+            --color-success-bg: #D1FAE5;
+            --color-error: #DC2626;
+            --color-error-bg: #FEE2E2;
+
+            --color-jeopardy: #1E1B4B;
+            --color-jeopardy-text: #FBBF24;
+            --color-jeopardy-hover: #312E81;
+            
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            --shadow-focus: 0 0 0 4px rgba(59, 130, 246, 0.15);
+            
+            --font-family: 'Inter', system-ui, sans-serif;
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            
+            --transition-fast: 0.15s ease-in-out;
+            --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-family); background-color: var(--color-background);
+            color: var(--color-text-main); line-height: 1.6; padding: var(--spacing-md);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding-bottom: 4rem; }
+
+        h1, h2, h3, h4 { color: var(--color-text-main); font-weight: 700; line-height: 1.2; }
+        h1 { font-size: 2.25rem; letter-spacing: -0.025em; margin-bottom: var(--spacing-sm); }
+        h2 { font-size: 1.5rem; color: var(--color-primary); margin-bottom: var(--spacing-md); display: flex; align-items: center; gap: var(--spacing-sm); }
+        h3 { font-size: 1.25rem; margin-top: var(--spacing-md); margin-bottom: var(--spacing-sm); }
+        h4 { font-size: 1.1rem; margin-bottom: var(--spacing-xs); }
+        p { margin-bottom: var(--spacing-md); color: var(--color-text-muted); font-size: 1.05rem; }
+        .muted { color: var(--color-text-muted); font-size: 0.9rem; }
+
+        .card {
+            background-color: var(--color-surface); border-radius: var(--radius-lg);
+            padding: var(--spacing-xl); margin-bottom: var(--spacing-xl);
+            box-shadow: var(--shadow-md); border: 1px solid var(--color-border);
+        }
+
+        .header-card {
+            background: linear-gradient(135deg, #1E1B4B 0%, var(--color-primary) 100%);
+            color: white; border: none; position: relative; overflow: hidden;
+        }
+        .header-card h1, .header-card p, .header-card strong { color: white; }
+        
+        .agenda-box {
+            background: rgba(255,255,255,0.1); border-radius: var(--radius-md);
+            padding: var(--spacing-md); margin-top: var(--spacing-md); border: 1px solid rgba(255,255,255,0.2);
+        }
+        .agenda-box ul { margin-left: var(--spacing-lg); margin-top: var(--spacing-xs); font-size: 0.95rem; }
+        .agenda-box li { margin-bottom: 4px; }
+
+        button {
+            background-color: var(--color-primary-light); color: white; border: none;
+            padding: 0.75rem 1.5rem; border-radius: var(--radius-md); font-size: 1rem;
+            font-weight: 600; cursor: pointer; transition: all var(--transition-fast);
+            box-shadow: var(--shadow-sm); display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        button:hover { background-color: var(--color-primary-hover); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+        button.secondary { background-color: var(--color-surface); color: var(--color-text-main); border: 1px solid var(--color-border); box-shadow: none; }
+        button.secondary:hover { background-color: var(--color-surface-hover); border-color: var(--color-border-hover); }
+
+        input[type="text"], textarea {
+            width: 100%; padding: 0.875rem; border: 1.5px solid var(--color-border);
+            border-radius: var(--radius-md); font-family: var(--font-family); font-size: 1rem;
+            transition: all var(--transition-fast); background-color: var(--color-surface);
+        }
+        input[type="text"]:focus, textarea:focus { outline: none; border-color: var(--color-primary-light); box-shadow: var(--shadow-focus); }
+        
+        .tab-nav {
+            display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-xl);
+            overflow-x: auto; padding-bottom: var(--spacing-sm); scrollbar-width: none;
+        }
+        .tab-nav::-webkit-scrollbar { display: none; }
+        .tab-btn { background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-muted); padding: 0.75rem 1.25rem; border-radius: var(--radius-xl); font-weight: 600; white-space: nowrap; box-shadow: var(--shadow-sm); }
+        .tab-btn.active { background: var(--color-primary); color: white; border-color: var(--color-primary); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+        .section-card { display: none; animation: fadeIn 0.4s ease-out forwards; }
+        .section-card.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-lg); }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-md); }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-sm); }
+        
+        .book-reference { display: inline-flex; align-items: center; gap: 0.5rem; background-color: #E0E7FF; color: var(--color-primary); padding: 0.4rem 0.8rem; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; margin-bottom: var(--spacing-md); border: 1px solid #C7D2FE; }
+        .instruction-block { margin-bottom: var(--spacing-md); padding-bottom: var(--spacing-sm); border-bottom: 1px dashed var(--color-border); }
+        
+        .feedback { margin-top: var(--spacing-md); padding: var(--spacing-md); border-radius: var(--radius-md); font-weight: 600; display: none; }
+        .feedback.active { display: block; animation: fadeIn 0.3s ease; }
+        .feedback.correct { background-color: var(--color-success-bg); color: var(--color-success); border: 1px solid #A7F3D0; }
+        .feedback.incorrect { background-color: var(--color-error-bg); color: var(--color-error); border: 1px solid #FECACA; }
+
+        .quiz-board { background: var(--color-jeopardy); padding: var(--spacing-md); border-radius: var(--radius-lg); margin-bottom: var(--spacing-lg); border: 4px solid #0F172A; }
+        .quiz-header { text-align: center; color: white; font-weight: 800; font-size: 1.1rem; text-transform: uppercase; padding: var(--spacing-sm); text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+        .quiz-cell { background: var(--color-primary-light); color: var(--color-jeopardy-text); font-size: 1.75rem; font-weight: 800; text-align: center; padding: 1.5rem 1rem; border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s; box-shadow: inset 0 0 10px rgba(0,0,0,0.2); text-shadow: 2px 2px 4px rgba(0,0,0,0.5); border: 2px solid var(--color-primary); }
+        .quiz-cell:hover:not(.used) { transform: scale(1.05); background: var(--color-primary-hover); }
+        .quiz-cell.used { background: var(--color-jeopardy-hover); color: transparent; cursor: not-allowed; box-shadow: none; border-color: transparent; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-overlay.active { display: flex; }
+        .modal-card { background: var(--color-surface); padding: var(--spacing-xl); border-radius: var(--radius-lg); width: 90%; max-width: 600px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); text-align: center; position: relative; }
+        .modal-points { font-size: 1.2rem; color: var(--color-accent); font-weight: 800; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 2px; }
+        .modal-question { font-size: 1.4rem; font-weight: 600; color: var(--color-text-main); margin-bottom: var(--spacing-lg); line-height: 1.4; }
+        .modal-answer { display: none; background: #ECFDF5; padding: var(--spacing-md); border-radius: var(--radius-md); border: 1px solid #10B981; color: #065F46; font-weight: 600; margin-bottom: var(--spacing-md); font-size: 1.1rem; }
+
+        .item-row { display: flex; align-items: flex-start; gap: var(--spacing-md); margin-bottom: var(--spacing-sm); background: var(--color-surface); padding: var(--spacing-md); border-radius: var(--radius-md); border: 1px solid var(--color-border); }
+        .item-number { font-weight: 700; color: var(--color-primary-light); background: #EFF6FF; min-width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+        
+        .formula-box { background: #EEF2FF; border: 2px dashed var(--color-primary-light); padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-lg); }
+        
+        .mission-card { background: var(--color-surface); border: 1px solid var(--color-border); border-top: 4px solid var(--color-accent); border-radius: var(--radius-md); padding: var(--spacing-lg); box-shadow: var(--shadow-sm); transition: transform 0.2s; }
+        .mission-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+        
+        .radio-option { display: block; cursor: pointer; padding: 0.6rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border); margin-bottom: 0.5rem; transition: background 0.2s; background: var(--color-surface); }
+        .radio-option:hover { background: var(--color-surface-hover); }
+        .radio-option input { margin-right: 0.5rem; transform: scale(1.1); accent-color: var(--color-primary-light); }
+
+        .ai-helper { background: linear-gradient(145deg, #F0FDF4 0%, #DCFCE7 100%); border: 1px solid #86EFAC; border-radius: var(--radius-lg); padding: var(--spacing-lg); margin-top: var(--spacing-lg); }
+        
+        .table-responsive { width: 100%; overflow-x: auto; border-radius: var(--radius-md); border: 1px solid var(--color-border); margin-top: var(--spacing-md); }
+        .rubric-table { width: 100%; min-width: 600px; border-collapse: collapse; }
+        .rubric-table th, .rubric-table td { border-bottom: 1px solid var(--color-border); padding: var(--spacing-sm); text-align: center; }
+        .rubric-table th { background: var(--color-background); font-weight: 600; }
+        .rubric-table td.criteria-name { text-align: left; background: var(--color-surface); font-weight: 500; border-right: 1px solid var(--color-border); }
+        
+        .award-box { text-align: center; padding: var(--spacing-lg); background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-radius: var(--radius-lg); border: 2px solid #F59E0B; margin-bottom: var(--spacing-md); }
+        .award-title { font-size: 1.5rem; font-weight: 800; color: #B45309; margin-bottom: 0.5rem; text-transform: uppercase; }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .quiz-header { font-size: 0.8rem; }
+            .quiz-cell { font-size: 1.2rem; padding: 1rem 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card header-card">
+        <h1>Class 15: The Final Challenge</h1>
+        <div class="grid-2">
+            <div>
+                <p style="margin-bottom: 0;"><strong>Level:</strong> Pre-Independent 5 (B1+)<br><strong>Format:</strong> Interactive Workshop & Finale</p>
+                <div class="agenda-box">
+                    <strong>📅 Today's Agenda:</strong>
+                    <ul>
+                        <li>Warm Up: The Corporate Quiz Show</li>
+                        <li>Grammar: Parallel Structure (The HR Memo)</li>
+                        <li>Mediation: The Hostile Meeting</li>
+                        <li>Speaking: Advanced Consulting Cases</li>
+                        <li>Writing: The CEO Proposal</li>
+                        <li>Wrap Up: The B1+ Survival Awards</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="agenda-box" style="background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4);">
+                <strong>🎯 Learning Objectives:</strong>
+                <ul>
+                    <li>Apply cumulative vocabulary and grammar in a gamified context.</li>
+                    <li>De-escalate workplace conflict using B1+ mediating phrases.</li>
+                    <li>Construct perfect parallel structure in professional contexts.</li>
+                    <li>Draft a persuasive formal/informal business proposal.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <nav class="tab-nav" id="main-tabs">
+        <button class="tab-btn active" onclick="openTab('tab-warmup', this)">🏆 1. Quiz Show</button>
+        <button class="tab-btn" onclick="openTab('tab-grammar', this)">⚖️ 2. Grammar</button>
+        <button class="tab-btn" onclick="openTab('tab-mediation', this)">🤝 3. Mediation</button>
+        <button class="tab-btn" onclick="openTab('tab-speaking', this)">🕵️‍♂️ 4. Consulting</button>
+        <button class="tab-btn" onclick="openTab('tab-writing', this)">✍️ 5. Writing</button>
+        <button class="tab-btn" onclick="openTab('tab-wrapup', this)">🎓 6. Wrap Up</button>
+    </nav>
+
+    <div class="card section-card active" id="tab-warmup">
+        <h2>🏆 1. Warm Up: The Corporate Quiz Show</h2>
+        <div class="instruction-block">
+            <p><strong>Activity:</strong> Let's review everything we have learned in this unit! Divide the class into teams. Choose a category and a point value. To win the points, your team must correctly solve the challenge on the screen.</p>
+        </div>
+
+        <div class="quiz-board">
+            <div class="grid-4" style="margin-bottom: var(--spacing-sm);">
+                <div class="quiz-header">Office Vocab</div>
+                <div class="quiz-header">Soft Skills</div>
+                <div class="quiz-header">Grammar Fixes</div>
+                <div class="quiz-header">Wildcard Speaking</div>
+            </div>
+            <div class="grid-4" id="quiz-grid">
+                <!-- Rendered via JS -->
+            </div>
+        </div>
+        
+        <div style="text-align: center;">
+            <button onclick="resetQuiz()" class="secondary">Restart Quiz Show</button>
+        </div>
+    </div>
+
+    <!-- Modal for Quiz Show -->
+    <div class="modal-overlay" id="quiz-modal">
+        <div class="modal-card">
+            <div class="modal-points" id="modal-cat-points">CATEGORY - 100 Points</div>
+            <div class="modal-question" id="modal-q">Question text goes here...</div>
+            <div class="modal-answer" id="modal-a">Answer text goes here...</div>
+            
+            <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 1.5rem;">
+                <button onclick="showQuizAnswer()" class="secondary" id="btn-show-ans">👀 Show Answer</button>
+                <button onclick="closeQuizModal(true)" style="background: var(--color-success);">✅ Award Points</button>
+                <button onclick="closeQuizModal(false)" style="background: var(--color-error);">❌ Missed</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card section-card" id="tab-grammar">
+        <h2>⚖️ 2. Grammar: The Broken HR Memo</h2>
+        <div class="instruction-block">
+            <p><strong>Upgraded Activity:</strong> We are reinforcing Parallel Structure! Read the grammar formula box carefully. Then, audit the 15 sentences from an HR Performance Review document and rewrite them so they have perfect grammatical symmetry.</p>
+        </div>
+        
+        <div class="formula-box">
+            <h3 style="margin-top: 0; color: var(--color-primary); font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-size: 1.5rem;">🧮</span> The Parallel Structure Formula
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: var(--spacing-sm); color: var(--color-text-main);">To fix a broken sentence, identify the first item in the list. Force the other items to match its grammatical form.</p>
+            
+            <div class="grid-2">
+                <div style="background: white; padding: var(--spacing-sm) var(--spacing-md); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+                    <strong style="color: var(--color-primary-light);">Noun Formula:</strong><br>
+                    <span class="muted">List: Noun + Noun + Noun</span><br>
+                    <span style="font-size: 0.9rem;">"He loves <strong>coffee</strong>, <strong>tea</strong>, and <strong>water</strong>."</span>
+                </div>
+                <div style="background: white; padding: var(--spacing-sm) var(--spacing-md); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+                    <strong style="color: var(--color-secondary);">Gerund (-ing) Formula:</strong><br>
+                    <span class="muted">List: -ing Verb + -ing Verb + -ing Verb</span><br>
+                    <span style="font-size: 0.9rem;">"She enjoys <strong>reading</strong>, <strong>writing</strong>, and <strong>coding</strong>."</span>
+                </div>
+                <div style="background: white; padding: var(--spacing-sm) var(--spacing-md); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+                    <strong style="color: var(--color-accent);">Infinitive Formula:</strong><br>
+                    <span class="muted">List: To + Verb + Verb + Verb</span><br>
+                    <span style="font-size: 0.9rem;">"We plan <strong>to meet</strong>, <strong>discuss</strong>, and <strong>decide</strong>."</span>
+                </div>
+                <div style="background: white; padding: var(--spacing-sm) var(--spacing-md); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+                    <strong style="color: var(--color-error);">Adjective Formula:</strong><br>
+                    <span class="muted">List: Adj + Adj + Adj</span><br>
+                    <span style="font-size: 0.9rem;">"The office is <strong>bright</strong>, <strong>clean</strong>, and <strong>quiet</strong>."</span>
+                </div>
+            </div>
+        </div>
+        
+        <div id="parallel-container">
+            <!-- Populated by JS -->
+        </div>
+        
+        <div style="margin-top: var(--spacing-lg);">
+            <button onclick="checkParallel()">Review Document (Self-Check)</button>
+            <div id="parallel-feedback" class="feedback"></div>
+        </div>
+    </div>
+
+    <div class="card section-card" id="tab-mediation">
+        <h2>🤝 3. Mediation: The Hostile Meeting</h2>
+        <div class="instruction-block">
+            <p><strong>Activity:</strong> As an expert consultant, you must mediate conflicts. Two employees (Tom and Sarah) are arguing over returning to the office vs. remote work. Read their complaints, then choose the most diplomatic, B1+ phrasing to de-escalate the conflict.</p>
+        </div>
+
+        <div style="background: #F8FAFC; border-left: 4px solid var(--color-primary-light); padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-lg);">
+            <h4 style="margin-top:0;">📝 Transcript Excerpt:</h4>
+            <p style="font-style: italic; margin-bottom: 0.5rem; font-size: 0.95rem;"><strong>Tom:</strong> "Working from home is a joke. Nobody answers emails on time, and collaboration is impossible. We need everyone back in the office 5 days a week!"</p>
+            <p style="font-style: italic; margin-bottom: 0; font-size: 0.95rem;"><strong>Sarah:</strong> "That's ridiculous. I am way more productive at home without the noisy office. You just want to micromanage us!"</p>
+        </div>
+
+        <div id="mediation-container">
+            <!-- JS Generated MCQs -->
+        </div>
+        
+        <button onclick="checkMediation()" style="margin-top: var(--spacing-md);">Submit Mediation Audit</button>
+        <div id="mediation-feedback" class="feedback"></div>
+    </div>
+
+    <div class="card section-card" id="tab-speaking">
+        <h2>🕵️‍♂️ 4. Speaking: Advanced Consulting Cases</h2>
+        <div class="instruction-block">
+            <p><strong>Activity:</strong> Your pair runs an elite consulting agency. Choose one complex client file below. Read the background and the constraints. Discuss a strategy using the Consultant Framework, and prepare a 2-minute pitch for the class. <strong>You must include one perfectly parallel list in your pitch!</strong></p>
+        </div>
+
+        <div style="background: #EEF2FF; padding: var(--spacing-sm); border-radius: 8px; margin-bottom: var(--spacing-lg); display: flex; justify-content: space-around; font-size: 0.95rem; font-weight: 600; border: 1px solid #C7D2FE;">
+            <span>1️⃣ Read & Solo Think (2m)</span> ➔ <span>2️⃣ Group Strategy (4m)</span> ➔ <span>3️⃣ The Class Pitch (2m)</span>
+        </div>
+
+        <div class="grid-3">
+            <div class="mission-card" style="border-top-color: #3B82F6;">
+                <h3 style="color: #1D4ED8; margin-top:0; font-size: 1.2rem;">Case A: The Burnout Tech Firm</h3>
+                <div style="font-size: 0.85rem; margin-bottom: 0.5rem;"><strong style="color:var(--color-text-main)">Background:</strong> An app development company works 60-hour weeks. The office has video games, free food, and nap pods.</div>
+                <div style="font-size: 0.85rem; margin-bottom: 0.5rem; padding-left: 0.5rem; border-left: 2px solid var(--color-border); font-style: italic; color: var(--color-text-muted);">"I haven't seen my family in days. I don't want free pizza, I want to sleep."</div>
+                <div style="font-size: 0.85rem;"><strong style="color:var(--color-text-main)">The Goal:</strong> Propose 3 new self-management or scheduling rules to fix burnout without losing productivity.</div>
+            </div>
+            
+            <div class="mission-card" style="border-top-color: #10B981;">
+                <h3 style="color: #047857; margin-top:0; font-size: 1.2rem;">Case B: The Chaotic Agency</h3>
+                <div style="font-size: 0.85rem; margin-bottom: 0.5rem;"><strong style="color:var(--color-text-main)">Background:</strong> A marketing firm has a 100% open-plan office. No assigned desks, loud music, and dogs are allowed.</div>
+                <div style="font-size: 0.85rem; margin-bottom: 0.5rem; padding-left: 0.5rem; border-left: 2px solid var(--color-border); font-style: italic; color: var(--color-text-muted);">"I can't focus. Someone is always talking, and a dog ate my client report yesterday."</div>
+                <div style="font-size: 0.85rem;"><strong style="color:var(--color-text-main)">The Goal:</strong> Design a hybrid layout and propose 3 strict rules to restore focus and professionalism.</div>
+            </div>
+
+            <div class="mission-card" style="border-top-color: #F59E0B;">
+                <h3 style="color: #B45309; margin-top:0; font-size: 1.2rem;">Case C: The Ghost Town</h3>
+                <div style="font-size: 0.85rem; margin-bottom: 0.5rem;"><strong style="color:var(--color-text-main)">Background:</strong> A traditional law firm tried to allow remote work. Now, the huge, expensive office is completely empty.</div>
+                <div style="font-size: 0.85rem; margin-bottom: 0.5rem; padding-left: 0.5rem; border-left: 2px solid var(--color-border); font-style: italic; color: var(--color-text-muted);">"I come to the office and I'm alone all day. I don't even know my new colleagues."</div>
+                <div style="font-size: 0.85rem;"><strong style="color:var(--color-text-main)">The Goal:</strong> Create a compelling reason or schedule to bring people back to the office 2-3 days a week happily.</div>
+            </div>
+        </div>
+
+        <div style="margin-top: var(--spacing-lg); padding-top: var(--spacing-md); border-top: 1px solid var(--color-border);">
+            <h4>🧰 Consultant Toolkit (Mediation & Pitch Phrases)</h4>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                <span class="tab-btn" style="padding: 0.3rem 0.6rem; font-size: 0.85rem; box-shadow: none;">"After analyzing the situation..."</span>
+                <span class="tab-btn" style="padding: 0.3rem 0.6rem; font-size: 0.85rem; box-shadow: none;">"We believe the root cause is..."</span>
+                <span class="tab-btn" style="padding: 0.3rem 0.6rem; font-size: 0.85rem; box-shadow: none;">"To solve this, we propose [Noun], [Noun], and [Noun]."</span>
+                <span class="tab-btn" style="padding: 0.3rem 0.6rem; font-size: 0.85rem; box-shadow: none;">"This compromise will help both sides."</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card section-card" id="tab-writing">
+        <h2>✍️ 5. Writing: The Final Proposal</h2>
+        <div class="instruction-block">
+            <p><strong>Activity:</strong> Write a formal/informal email to the CEO of the company you just analyzed in the Speaking section. Outline your 3 main recommendations. <strong>You must use parallel structure correctly.</strong></p>
+        </div>
+
+        <div class="grid-2" style="margin-bottom: var(--spacing-lg);">
+            <div style="background: white; border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden;">
+                <div style="background: var(--color-primary-light); color: white; padding: 0.75rem 1rem; font-weight: 600;">
+                    📋 The CEO Proposal Blueprint
+                </div>
+                <div style="padding: 1rem;">
+                    <ul style="margin-left: 1rem; font-size: 0.95rem; color: var(--color-text-main);">
+                        <li style="margin-bottom: 0.5rem;"><strong>The Hook:</strong> Thank them for hiring your agency and state the purpose of the email.</li>
+                        <li style="margin-bottom: 0.5rem;"><strong>The Diagnosis:</strong> Briefly state what the main problem is based on the employees' quotes.</li>
+                        <li style="margin-bottom: 0.5rem;"><strong>The Solutions (Parallel):</strong> List your 3 recommendations using perfect parallel structure (e.g., <em>"We recommend [verb-ing], [verb-ing], and [verb-ing]."</em>)</li>
+                        <li><strong>Sign-off:</strong> Offer a follow-up meeting and close professionally.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: var(--color-surface); padding: var(--spacing-md); border-radius: 8px; border: 1px solid var(--color-border);">
+                <h3 style="margin-top: 0; font-size: 1.1rem; color: var(--color-primary);">🗣️ Useful Proposal Phrases</h3>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9rem;">
+                    <div><strong style="display: block; margin-bottom: 0.2rem; color: var(--color-text-muted);">The Hook:</strong> 
+                        <span class="tab-btn" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; box-shadow: none; display: inline-block; margin: 0.1rem;">"Thank you for trusting our agency."</span>
+                        <span class="tab-btn" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; box-shadow: none; display: inline-block; margin: 0.1rem;">"We are writing to propose..."</span>
+                    </div>
+                    <div><strong style="display: block; margin-bottom: 0.2rem; color: var(--color-text-muted);">The Diagnosis:</strong> 
+                        <span class="tab-btn" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; box-shadow: none; display: inline-block; margin: 0.1rem;">"Based on our analysis, the main issue is..."</span>
+                    </div>
+                    <div><strong style="display: block; margin-bottom: 0.2rem; color: var(--color-text-muted);">The Solutions (Parallel!):</strong> 
+                        <span class="tab-btn" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; box-shadow: none; display: inline-block; margin: 0.1rem;">"We recommend [verb-ing], [verb-ing], and [verb-ing]."</span>
+                        <span class="tab-btn" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; box-shadow: none; display: inline-block; margin: 0.1rem;">"Our strategy involves [Noun], [Noun], and [Noun]."</span>
+                    </div>
+                    <div><strong style="display: block; margin-bottom: 0.2rem; color: var(--color-text-muted);">Sign-off:</strong> 
+                        <span class="tab-btn" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; box-shadow: none; display: inline-block; margin: 0.1rem;">"We would love to discuss this further."</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <textarea placeholder="Subject: Consulting Recommendations for [Company Name]&#10;&#10;Dear CEO,&#10;&#10;Thank you for partnering with our agency..." style="min-height: 200px;"></textarea>
+        
+        <div class="ai-helper">
+            <h3 style="margin-top:0; color: #166534; font-size: 1.1rem;">🤖 AI Co-Thinker</h3>
+            <p style="margin-bottom: var(--spacing-sm); font-size: 0.95rem; color: #14532D;">Need inspiration? Review this sample proposal for Case A.</p>
+            <button class="secondary" style="font-size: 0.85rem; padding: 0.5rem 1rem;" onclick="document.getElementById('ai-sample').style.display = document.getElementById('ai-sample').style.display === 'block' ? 'none' : 'block'">Show/Hide Sample</button>
+            
+            <div id="ai-sample" style="display: none; background: white; padding: var(--spacing-md); border: 1px solid #86EFAC; border-radius: var(--radius-sm); font-size: 0.95rem; margin-top: var(--spacing-md);">
+                "Dear CEO,<br><br>Thank you for trusting our agency. After analyzing your office, it is clear that your team is suffering from severe burnout.<br><br>While the free food and games are nice, employees need rest. To fix this, we recommend <strong>limiting work weeks to 40 hours</strong>, <strong>removing the nap pods</strong>, and <strong>sending staff home at 5:00 PM</strong>. <em>[Parallel -ing Verbs]</em><br><br>We believe this will make your team healthier, happier, and more productive.<br><br>Best regards,<br>The Consultants"
+            </div>
+        </div>
+
+        <div style="margin-top: var(--spacing-xl);">
+            <h3>Writing Evaluation Rubric</h3>
+            <input type="text" id="studentName" placeholder="Student Name..." style="max-width: 300px; margin-bottom: var(--spacing-md);">
+            <div class="table-responsive">
+                <table class="rubric-table">
+                    <thead>
+                        <tr>
+                            <th>Criteria</th>
+                            <th>1 (Needs Work)</th>
+                            <th>2</th>
+                            <th>3 (Average)</th>
+                            <th>4</th>
+                            <th>5 (Excellent)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rubric-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+            <button onclick="generateReport()" style="margin-top: var(--spacing-md);">Generate Report</button>
+            <div id="rubric-report" class="feedback" style="background: white; border-color: var(--color-border); font-family: monospace;"></div>
+        </div>
+    </div>
+
+    <div class="card section-card" id="tab-wrapup">
+        <h2>🎓 6. Wrap Up: The B1+ Survival Awards</h2>
+        <div class="instruction-block">
+            <p><strong>Activity:</strong> We have reached the end of the course! It's time to celebrate. Choose an award from below. Nominate a classmate to receive it, and give a short, 30-second speech explaining why they deserve it based on their work in this class!</p>
+        </div>
+        
+        <div class="grid-2">
+            <div class="award-box">
+                <div class="award-title">💡 The Best Brainstormer</div>
+                <p style="font-size: 0.95rem; color: #92400E; margin-bottom: 0;">For the student who always had the most creative, out-of-the-box ideas during speaking activities.</p>
+            </div>
+            <div class="award-box">
+                <div class="award-title">⚖️ The Grammar Police</div>
+                <p style="font-size: 0.95rem; color: #92400E; margin-bottom: 0;">For the student who always noticed mistakes and mastered Parallel Structure.</p>
+            </div>
+            <div class="award-box">
+                <div class="award-title">👔 The Future CEO</div>
+                <p style="font-size: 0.95rem; color: #92400E; margin-bottom: 0;">For the student with the most professional vocabulary and best self-management skills.</p>
+            </div>
+            <div class="award-box">
+                <div class="award-title">🤝 The Master Mediator</div>
+                <p style="font-size: 0.95rem; color: #92400E; margin-bottom: 0;">For the student who was the best at calming down conflicts and finding compromises.</p>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: var(--spacing-xl); padding-top: var(--spacing-md); border-top: 1px solid var(--color-border);">
+            <h3 style="color: var(--color-success);">🎉 Congratulations on finishing the course! 🎉</h3>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openTab(tabId, btnElement) {
+        document.querySelectorAll('.section-card').forEach(sec => sec.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        if (btnElement) btnElement.classList.add('active');
+        if(window.innerWidth < 768) {
+            document.getElementById('main-tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    const quizData = [
+        // Vocab
+        { q: "What do we call the regular journey between home and work?", a: "A Commute" },
+        { q: "What is the phrase for 'working extra hours'?", a: "Working overtime" },
+        { q: "Explain the word 'Deadline' without saying 'time' or 'due'.", a: "[Judge's discretion]" },
+        { q: "What is the opposite of working in an office?", a: "Working remotely (or from home)" },
+        // Soft Skills
+        { q: "If you do the most important tasks first, you are good at...", a: "Prioritizing" },
+        { q: "What 'C' means working well in a team and sharing credit?", a: "Collaboration" },
+        { q: "What is the danger of answering emails immediately instead of doing deep work?", a: "Poor Time Management / Lack of Focus" },
+        { q: "Name 3 of the 5 core Self-Management skills.", a: "Time Management, Prioritization, Problem Solving, Stress Management, Focus." },
+        // Grammar Fixes
+        { q: "Fix: 'He likes to read, writing, and to code.'", a: "He likes reading, writing, and coding. OR He likes to read, to write, and to code." },
+        { q: "Fix: 'Employees must to arrive on time.'", a: "Employees must arrive on time. (No 'to' after modal)" },
+        { q: "Fix: 'The software is fast, reliable, and costs a lot.'", a: "The software is fast, reliable, and expensive. (All adjectives)" },
+        { q: "Fix: 'You don't have to smoke in the office.'", a: "You MUST NOT smoke in the office. (Prohibition)" },
+        // Wildcard
+        { q: "Name 5 things you can find on a modern workstation in 10 seconds.", a: "[Monitor, keyboard, mouse, coffee, notepad, etc.]" },
+        { q: "Debate (30s): Why is a 4-day workweek better than a 5-day workweek?", a: "[Judge's discretion]" },
+        { q: "You sent a bad text about your boss TO your boss. What is your immediate professional response?", a: "[Judge's discretion - Apologize directly]" },
+        { q: "Sell a 'waterproof teabag' to the class in 30 seconds.", a: "[Judge's discretion]" }
+    ];
+
+    let quizUsed = Array(16).fill(false);
+    let activeQuizIndex = null;
+
+    function renderQuiz() {
+        const grid = document.getElementById('quiz-grid');
+        let html = '';
+        const points = [100, 200, 300, 400];
+        
+        // 4 cols x 4 rows
+        for(let row = 0; row < 4; row++) {
+            for(let col = 0; col < 4; col++) {
+                let index = (col * 4) + row; // Column major mapping
+                let pVal = points[row];
+                html += `<div class="quiz-cell ${quizUsed[index] ? 'used' : ''}" onclick="openQuiz(${index}, ${pVal}, ${col})">${pVal}</div>`;
+            }
+        }
+        grid.innerHTML = html;
+    }
+
+    function openQuiz(index, points, col) {
+        if(quizUsed[index]) return;
+        activeQuizIndex = index;
+        
+        const categories = ["Office Vocab", "Soft Skills", "Grammar Fixes", "Wildcard Speaking"];
+        document.getElementById('modal-cat-points').innerText = `${categories[col]} - ${points} Points`;
+        document.getElementById('modal-q').innerText = quizData[index].q;
+        document.getElementById('modal-a').innerText = quizData[index].a;
+        
+        document.getElementById('modal-a').style.display = 'none';
+        document.getElementById('btn-show-ans').style.display = 'inline-block';
+        
+        document.getElementById('quiz-modal').classList.add('active');
+    }
+
+    function showQuizAnswer() {
+        document.getElementById('modal-a').style.display = 'block';
+        document.getElementById('btn-show-ans').style.display = 'none';
+    }
+
+    function closeQuizModal(award) {
+        if(award) {
+            quizUsed[activeQuizIndex] = true;
+        }
+        document.getElementById('quiz-modal').classList.remove('active');
+        renderQuiz();
+    }
+
+    function resetQuiz() {
+        quizUsed = Array(16).fill(false);
+        renderQuiz();
+    }
+
+    const grammarData = [
+        { bad: "1. The new software is fast, reliable, and it costs a lot.", good: "The new software is fast, reliable, and expensive." },
+        { bad: "2. He is responsible for hiring, to train, and firing employees.", good: "He is responsible for hiring, training, and firing employees." },
+        { bad: "3. We expect staff to work hard, communicating clearly, and show respect.", good: "We expect staff to work hard, to communicate clearly, and to show respect." },
+        { bad: "4. The manager likes reviewing reports, leading meetings, and to plan events.", good: "The manager likes reviewing reports, leading meetings, and planning events." },
+        { bad: "5. Our core values are honesty, being dedicated, and teamwork.", good: "Our core values are honesty, dedication, and teamwork." },
+        { bad: "6. She asked me to print the document, sign it, and emailing it back.", good: "She asked me to print the document, sign it, and email it back." },
+        { bad: "7. The presentation was long, boring, and it didn't have a point.", good: "The presentation was long, boring, and pointless." },
+        { bad: "8. Good leaders inspire the team, they make tough choices, and take risks.", good: "Good leaders inspire the team, make tough choices, and take risks." },
+        { bad: "9. Please submit your resume, write a cover letter, and your portfolio.", good: "Please submit your resume, cover letter, and portfolio." },
+        { bad: "10. He was fired for arriving late, missing deadlines, and he stole office supplies.", good: "He was fired for arriving late, missing deadlines, and stealing office supplies." },
+        { bad: "11. You can pay by credit card, using a check, or cash.", good: "You can pay by credit card, check, or cash." },
+        { bad: "12. Focus on learning, to adapt, and growing.", good: "Focus on learning, adapting, and growing." },
+        { bad: "13. The office is bright, clean, and has quiet spaces.", good: "The office is bright, clean, and quiet." },
+        { bad: "14. Her goals are to increase sales, finding leads, and close deals.", good: "Her goals are to increase sales, find leads, and close deals." },
+        { bad: "15. Employees should dress professionally, to speak respectfully, and arrive on time.", good: "Employees should dress professionally, speak respectfully, and arrive on time." }
+    ];
+
+    function renderParallel() {
+        document.getElementById('parallel-container').innerHTML = grammarData.map((item, i) => `
+            <div class="item-row" style="flex-direction: column;">
+                <p style="font-weight: 500; margin-bottom: 0.5rem; font-size: 0.95rem; color: var(--color-error);">${item.bad}</p>
+                <input type="text" placeholder="Rewrite with parallel structure...">
+                <div class="parallel-answer" style="display: none; margin-top: 0.75rem; background: #ECFDF5; border-left: 3px solid #10B981; padding: 0.75rem; border-radius: 4px; font-size: 0.9rem; color: #047857; width: 100%;">
+                    <strong>💡 Suggested Answer:</strong> ${item.good}
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    function checkParallel() {
+        document.querySelectorAll('.parallel-answer').forEach(el => {
+            el.style.display = 'block';
+            el.style.animation = 'fadeIn 0.4s ease';
+        });
+        const fb = document.getElementById('parallel-feedback');
+        fb.innerHTML = "✅ Audit complete! Compare your rewritten sentences with the suggested parallel forms.";
+        fb.className = "feedback active correct";
+    }
+
+    const mediationData = [
+        { q: "Instead of saying 'You're wrong, Tom', what is a better mediating phrase?", opts: ["I see your point, Tom, but...", "Tom, your idea is bad.", "Nobody agrees with you, Tom."], ans: 0 },
+        { q: "How can you validate Sarah's feelings before disagreeing?", opts: ["You are being emotional.", "I understand why you prefer home, Sarah.", "Stop complaining, Sarah."], ans: 1 },
+        { q: "To bring both sides together, you should ask:", opts: ["Who is going to win this argument?", "Can we find a compromise that works for both?", "Why are you two always fighting?"], ans: 1 },
+        { q: "Instead of 'We are forcing you back to the office', say:", opts: ["You have to come back or you are fired.", "We would like to trial a hybrid schedule.", "We are the bosses, so come back."], ans: 1 },
+        { q: "When Tom says 'collaboration is impossible', a mediator should ask:", opts: ["Can you give me a specific example of that?", "Why are you so negative?", "Do you even know how to use Zoom?"], ans: 0 },
+        { q: "To transition to solutions, say:", opts: ["Let's move on.", "How can we address the communication issues while keeping flexibility?", "I am bored of this topic."], ans: 1 },
+        { q: "If Sarah interrupts Tom, the mediator should say:", opts: ["Shut up, Sarah.", "Sarah, let's allow Tom to finish his thought.", "Both of you be quiet."], ans: 1 },
+        { q: "To summarize the meeting, use:", opts: ["So, to wrap up, we agree on...", "I wasn't listening, what did we decide?", "Okay, meeting is over."], ans: 0 },
+        { q: "If both refuse to compromise, suggest:", opts: ["Let's fight outside.", "Perhaps we should take a short break and revisit this later.", "I guess the company will just fail."], ans: 1 },
+        { q: "A core rule of mediation is to attack the ________, not the person.", opts: ["Salary", "Problem", "Manager"], ans: 1 }
+    ];
+
+    function renderMediation() {
+        document.getElementById('mediation-container').innerHTML = mediationData.map((d, i) => `
+            <div class="item-row" style="flex-direction: column;">
+                <p style="font-weight: 500; font-size: 0.95rem; margin-bottom: 0.5rem;"><span class="item-number" style="display:inline-flex; width: 24px; height: 24px; font-size: 0.8rem; margin-right: 8px;">${i+1}</span> ${d.q}</p>
+                <div style="padding-left: 32px; display: flex; flex-direction: column; width: 100%;">
+                    ${d.opts.map((opt, j) => `<label class="radio-option"><input type="radio" name="med-${i}" value="${j}"> ${opt}</label>`).join('')}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function checkMediation() {
+        let score = 0;
+        mediationData.forEach((d, i) => {
+            document.getElementsByName(`med-${i}`).forEach(r => { if(r.checked && parseInt(r.value) === d.ans) score++; });
+        });
+        const fb = document.getElementById('mediation-feedback');
+        fb.innerHTML = `🎯 Mediation Score: ${score} / 10. A good mediator uses neutral, objective language!`;
+        fb.className = "feedback active correct";
+    }
+
+    function renderRubric() {
+        const criteria = ["Clear Proposal Structure (Hook, Diagnosis, Solutions)", "Use of Parallel Structure (x3)", "Professional Tone", "Grammar & Vocabulary"];
+        document.getElementById('rubric-body').innerHTML = criteria.map((crit, i) => `
+            <tr>
+                <td class="criteria-name">${crit}</td>
+                ${[1,2,3,4,5].map(j => `<td class="radio-cell"><label><input type="radio" name="crit-${i}" value="${j}"></label></td>`).join('')}
+            </tr>
+        `).join('');
+    }
+
+    function generateReport() {
+        const name = document.getElementById('studentName').value || "Student";
+        let total = 0, answered = 0;
+        for(let i=0; i<4; i++) {
+            document.getElementsByName(`crit-${i}`).forEach(r => { if(r.checked) { total += parseInt(r.value); answered++; } });
+        }
+        const reportBox = document.getElementById('rubric-report');
+        if(answered < 4) { reportBox.innerHTML = "⚠️ Please score all criteria."; reportBox.className = "feedback active incorrect"; return; }
+        reportBox.className = "feedback active correct";
+        reportBox.innerHTML = `<strong>📋 Final Proposal Report:</strong> ${name}<br><strong>Total:</strong> ${total}/20<br><strong>Avg:</strong> ${(total/4).toFixed(1)}/5.0`;
+    }
+
+    window.onload = () => {
+        renderQuiz();
+        renderParallel();
+        renderMediation();
+        renderRubric();
+    };
+</script>
+</body>
+</html>
